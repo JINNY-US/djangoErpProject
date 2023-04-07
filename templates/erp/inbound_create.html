@@ -10,6 +10,7 @@
                 {% csrf_token %}
                 <select class="form-select" aria-label="Default select example" method="get" id="product_code" name="product_code">
                     <label for="username"></label>
+                    <!-- 현재 시간 출력 해보기 -->
                     <option selected>상품 코드</option>
                     {% for pro in product_list %}
                         <option value="{{ pro.product_code }}">{{ pro.product_code }}</option>

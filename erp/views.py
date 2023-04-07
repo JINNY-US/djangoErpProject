@@ -1,8 +1,12 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from .models import Product, Inbound, Outbound
 from django.http import HttpResponse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from datetime import timedelta
+
 
 # Create your views here.
 def home(request):
@@ -43,6 +47,7 @@ def inbound_create(request):
     elif request.method == 'POST':
         product_code = request.POST.get('product_code', '')
         inbound_quantity = request.POST.get('product_quantity', '')
+        inbound_date = 0 # 시간 불러오기 가능한가??
 
         if product_code == '' or inbound_quantity == '':
             return render(request, 'erp/inbound_create.html', {'error': '빈칸을 입력해 주세요.'})
@@ -51,8 +56,9 @@ def inbound_create(request):
             product.product_quantity += int(inbound_quantity)
             product.save()
             product_list = Product.objects.all()
-#            inbound_date = Inbound.objects.inbound_date
-            inbound_date = Inbound.inbound_date
+
+            inbound_date = str(inbound_date)
+            # 시간을 자동 저장하는 부분에서 버그가 남
 
             return render(request, 'erp/inventory.html', {'product_list': product_list, 'inbound_date': inbound_date})
 
@@ -74,6 +80,7 @@ def outbound_create(request):
             product.save()
             product_list = Product.objects.all()
 #            outbound_date = Outbound.objects.outbound_date
+            # 시간을 자동 저장하는 부분에서 버그가 남
             outbound_date = Outbound.outbound_date
 
             return render(request, 'erp/inventory.html', {'product_list': product_list, 'outbound_date': outbound_date})
